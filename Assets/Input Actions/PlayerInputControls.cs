@@ -98,6 +98,94 @@ public partial class @PlayerInputControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Abilities"",
+            ""id"": ""7269d0d9-3f2c-45d8-bd5d-e6f7a92f4c3f"",
+            ""actions"": [
+                {
+                    ""name"": ""Ability1"",
+                    ""type"": ""Button"",
+                    ""id"": ""6c152a20-1617-4708-9a61-0c9f647a7d7c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ability2"",
+                    ""type"": ""Button"",
+                    ""id"": ""235c59a7-9360-430b-8185-e978f1f8c83e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ability3"",
+                    ""type"": ""Button"",
+                    ""id"": ""cfa6a222-9e1c-4f3f-98f7-bb3daf2d6dc8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ability4"",
+                    ""type"": ""Button"",
+                    ""id"": ""8a456c80-31be-42c2-b9fa-60d1e1fcc990"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""07f4b130-b1f6-4d77-aa14-34227e17c258"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ability1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5d4cb4be-d8e4-4b3d-bcd6-72bc82f76ee2"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ability2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1f30f7e4-c1b9-4690-9e9f-135bdeb4c540"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ability3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""da640bb7-9844-4796-a235-c3395f1bddac"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ability4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -109,6 +197,12 @@ public partial class @PlayerInputControls: IInputActionCollection2, IDisposable
         m_Misc = asset.FindActionMap("Misc", throwIfNotFound: true);
         m_Misc_Recenter = m_Misc.FindAction("Recenter", throwIfNotFound: true);
         m_Misc_SelectCharacter = m_Misc.FindAction("SelectCharacter", throwIfNotFound: true);
+        // Abilities
+        m_Abilities = asset.FindActionMap("Abilities", throwIfNotFound: true);
+        m_Abilities_Ability1 = m_Abilities.FindAction("Ability1", throwIfNotFound: true);
+        m_Abilities_Ability2 = m_Abilities.FindAction("Ability2", throwIfNotFound: true);
+        m_Abilities_Ability3 = m_Abilities.FindAction("Ability3", throwIfNotFound: true);
+        m_Abilities_Ability4 = m_Abilities.FindAction("Ability4", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -266,6 +360,76 @@ public partial class @PlayerInputControls: IInputActionCollection2, IDisposable
         }
     }
     public MiscActions @Misc => new MiscActions(this);
+
+    // Abilities
+    private readonly InputActionMap m_Abilities;
+    private List<IAbilitiesActions> m_AbilitiesActionsCallbackInterfaces = new List<IAbilitiesActions>();
+    private readonly InputAction m_Abilities_Ability1;
+    private readonly InputAction m_Abilities_Ability2;
+    private readonly InputAction m_Abilities_Ability3;
+    private readonly InputAction m_Abilities_Ability4;
+    public struct AbilitiesActions
+    {
+        private @PlayerInputControls m_Wrapper;
+        public AbilitiesActions(@PlayerInputControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Ability1 => m_Wrapper.m_Abilities_Ability1;
+        public InputAction @Ability2 => m_Wrapper.m_Abilities_Ability2;
+        public InputAction @Ability3 => m_Wrapper.m_Abilities_Ability3;
+        public InputAction @Ability4 => m_Wrapper.m_Abilities_Ability4;
+        public InputActionMap Get() { return m_Wrapper.m_Abilities; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(AbilitiesActions set) { return set.Get(); }
+        public void AddCallbacks(IAbilitiesActions instance)
+        {
+            if (instance == null || m_Wrapper.m_AbilitiesActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_AbilitiesActionsCallbackInterfaces.Add(instance);
+            @Ability1.started += instance.OnAbility1;
+            @Ability1.performed += instance.OnAbility1;
+            @Ability1.canceled += instance.OnAbility1;
+            @Ability2.started += instance.OnAbility2;
+            @Ability2.performed += instance.OnAbility2;
+            @Ability2.canceled += instance.OnAbility2;
+            @Ability3.started += instance.OnAbility3;
+            @Ability3.performed += instance.OnAbility3;
+            @Ability3.canceled += instance.OnAbility3;
+            @Ability4.started += instance.OnAbility4;
+            @Ability4.performed += instance.OnAbility4;
+            @Ability4.canceled += instance.OnAbility4;
+        }
+
+        private void UnregisterCallbacks(IAbilitiesActions instance)
+        {
+            @Ability1.started -= instance.OnAbility1;
+            @Ability1.performed -= instance.OnAbility1;
+            @Ability1.canceled -= instance.OnAbility1;
+            @Ability2.started -= instance.OnAbility2;
+            @Ability2.performed -= instance.OnAbility2;
+            @Ability2.canceled -= instance.OnAbility2;
+            @Ability3.started -= instance.OnAbility3;
+            @Ability3.performed -= instance.OnAbility3;
+            @Ability3.canceled -= instance.OnAbility3;
+            @Ability4.started -= instance.OnAbility4;
+            @Ability4.performed -= instance.OnAbility4;
+            @Ability4.canceled -= instance.OnAbility4;
+        }
+
+        public void RemoveCallbacks(IAbilitiesActions instance)
+        {
+            if (m_Wrapper.m_AbilitiesActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IAbilitiesActions instance)
+        {
+            foreach (var item in m_Wrapper.m_AbilitiesActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_AbilitiesActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public AbilitiesActions @Abilities => new AbilitiesActions(this);
     public interface IMovementActions
     {
         void OnMove(InputAction.CallbackContext context);
@@ -274,5 +438,12 @@ public partial class @PlayerInputControls: IInputActionCollection2, IDisposable
     {
         void OnRecenter(InputAction.CallbackContext context);
         void OnSelectCharacter(InputAction.CallbackContext context);
+    }
+    public interface IAbilitiesActions
+    {
+        void OnAbility1(InputAction.CallbackContext context);
+        void OnAbility2(InputAction.CallbackContext context);
+        void OnAbility3(InputAction.CallbackContext context);
+        void OnAbility4(InputAction.CallbackContext context);
     }
 }
